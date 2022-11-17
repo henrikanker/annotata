@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Stiler/style.css">
+    <script src="Script/myscript.js"></script>
+        <script type="text/javascript" src="http://pi.local/static/js/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="http://pi.local/static/js/lib/lodash.min.js"></script>
+    <script type="text/javascript" src="http://pi.local/static/js/lib/sockjs.min.js"></script>
+    <script type="text/javascript" src="http://pi.local/static/webassets/packed_client.js"></script>
+    <style>
+        body{
+            background-image: url('Bilder/bakgrunn.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+    </style>
+    <script>
+	function stopp(){
+        pause = true
+		OctoPrint.options.baseurl = "http://pi.local";
+		OctoPrint.options.apikey = "2B73B8EF36D04C4898DE251B72F1966F";
+		OctoPrint.files.list()
+   			 .done(function(response) {
+				OctoPrint.job.pause()
+			});
+	}
+	function start(){
+		OctoPrint.options.baseurl = "http://pi.local";
+		OctoPrint.options.apikey = "2B73B8EF36D04C4898DE251B72F1966F";
+		OctoPrint.files.list()
+   			 .done(function(response) {
+				OctoPrint.job.resume()
+			});
+	}
+
+    function fetcher() {
+        fetch('humidity.txt')
+        .then(response => response.text())
+        .then(text => fun(text))
+    }
+    setInterval(fetcher, 1000)
+        
+    var humidity = []
+    var temp = []
+    var MaxTemp = 26
+    var MinTemp = 20
+    var MaxHum = 50
+    var pause = false
+    var time = 1
+
+    function fun(tekst) {
+        var data = tekst
+        var lastData = data.slice(-27)
+        console.log(lastData);
+        humidity.push(lastData.slice(-7, -3))
+        temp.push(lastData.slice(-14,-10))
+        document.getElementById("temp").innerHTML = temp[temp.length-1] + ("&#8451;");
+        document.getElementById("humidity").innerHTML = humidity[humidity.length-1] + ("%");
+        if (pause == false && time > 0){
+            if (MinTemp > temp[temp.length-1]){
+                if (confirm("WARNING! Temperatur er for lav: "+ temp[temp.length-1])){
+                    stopp()
+                } else { 
+                    MinTemp = temp[temp.length-1]
+                    time = -11
+                }
+            } else if (MaxTemp < temp[temp.length-1]){
+                if (confirm("WARNING! Temperatur er for h�y: "+ temp[temp.length-1])){
+                    stopp()
+                } else { 
+                    MaxTemp = temp[temp.length-1]
+                    time = -11
+                }
+            }
+            if (MaxHum < humidity[humidity.length-1]){
+                if (confirm("WARNING! Luftfoktigheten er for h�y: "+ humidity[humidity.length-1])){
+                    stopp()
+                } else { 
+                    MaxHum = humidity[humidity.length-1]
+                    time = -11
+                }
+            }
+        }
+        time += 1
+    } setInterval(tekst, 5000)
+    
+    </script>
+    <title>Annotata</title>
+</head>
+<body>
+<div class="wrapper">
+        <header class="main-head">ANNOTATA </header>
+        <nav class="nav">
+            <button class="nav-item" role="button"><a href="app.html">Forside</a></button> <br> <br>
+            <button class="nav-item" role="button"><a href="timelapse.php">Timelapse</a></button> 
+        </nav>
+        <article class="content">     <!-- Element nummer 1 - livestream -->
+            <img src="http://pi.local/webcam/?action=stream" alt="Livestream av printeren">
+        </article>
+        <aside class="side">          <!-- Element nummer 2 - knapper -->
+            <button class="button-19" role="button" onclick="start()">START</button> <br> <br>
+            <button class="button-19" role="button" onclick="stopp()">STOP</button> 
+        </aside>
+        <div class="data">            <!-- Element nummer 3 - sensordata -->
+            <h1>Luftfuktighet: </h1> <p class="sensordata" id="humidity"> </p> 
+            <h1>Temperatur: </h1><p class="sensordata" id="temp"> </p>
+        </div>                   
+        <footer class="main-footer">
+            <h1>Laget av:</h1>
+            <p>Eivind <br> Kristoffer <br> Vi <br> Henrik <br> Adele <br> Truls <br>
+            </p> 
+        </footer>  
+</div>
+</body>
+</html>

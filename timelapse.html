@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Stiler/style.css">
+    <style>
+        body{
+            background-image: url('Bilder/bakgrunn.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    </style>
+    <script type="text/javascript" src="http://pi.local/static/js/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="http://pi.local/static/js/lib/lodash.min.js"></script>
+    <script type="text/javascript" src="http://pi.local/static/js/lib/sockjs.min.js"></script>
+    <script type="text/javascript" src="https://requirejs.org/docs/release/2.3.6/minified/require.js"
+   
+    {% assets "js_client" %}<script type="text/javascript" src="http://pi.local/static/webassets/packed_client.js"></script>{% endassets %}
+    <script> function stopp(){
+		OctoPrint.options.baseurl = "http://pi.local";
+		OctoPrint.options.apikey = "2B73B8EF36D04C4898DE251B72F1966F";
+		OctoPrint.files.list()
+   			 .done(function(response) {
+				OctoPrint.job.cancel()
+			});
+	}
+	function time(){
+		OctoPrint.timelapse.list()
+	}
+    </script>
+    <title>Annotata</title>
+</head>
+<body>
+    <h1 class="header">Annotata!</h1>
+        <div class="nav">
+            <a href="app.html">Forside</a>
+            <a href="printer1.html">Printer1</a>
+            <a href="printer2.html">Printer 2</a>
+            <a href="printer3.html">Printer 3</a>
+            <a href="arkiv.html">Arkiv</a>
+            <a class="aktiv" href="timelapse.html">Timelapse</a>
+        </div>
+<br>
+    <div id="div1">
+    </div>
+    <video width="320" height="240" controls>
+	<source src="timelapse/3DBenchy_20221110094237-fail.mp4" type="video/mp4">
+    </video>
+    <img src="timelapse/3DBenchy_20221110094237-fail.mp4" alt="Bilde av printer"> <br> <br>
+    <button class="button-19" role="button" onclick="time()">Timelapse</button> <br> <br>
+    <button class="button-19" role="button">STOP</button>
+<?php
+echo "My first PHP script!";
+?>
+</body>
+</html>

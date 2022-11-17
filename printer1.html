@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Stiler/style.css">
+    <title>Annotata</title>
+    <script src="http://pi.local/static/webassets/jquery.min.js"></script>
+    <script src="http://pi.local/static/webassets/lodash.min.js"></script>
+    <script src="http://pi.local/static/webassets/sockjs.min.js"></script>
+    {% assets "js_client" %}<script type="text/javascript" src="http://pi.local/static/webassets/packed_client.js"></script>{% endassets %}
+
+    <script>
+	function stopp(){
+		OctoPrint.options.baseurl = "http://pi.local";
+		OctoPrint.options.apikey = "2B73B8EF36D04C4898DE251B72F1966F";
+		OctoPrint.files.list()
+   			 .done(function(response) {
+				OctoPrint.job.cancel()
+			});
+	}
+    </script>
+</head>
+<body>
+    <h1 class="header">Printer 1</h1>
+    
+    <div class="ring-container">
+        <div class="ringring"></div>
+        <div class="circle"></div>
+    </div>
+        <div class="nav">
+            <a href="app.html">Forside</a>
+            <a class="aktiv" href="printer1.html">Printer1</a>
+            <a href="printer2.html">Printer 2</a>
+            <a href="printer3.html">Printer 3</a>
+            <a href="arkiv.html">Arkiv</a>
+            <a href="timelapse.html">Timelapse</a>
+        </div>
+<br>
+    <img src="Bilder/printer.jpg" alt="Bilde av printer"> <br> <br> 
+
+    <input type="button" class="button-19" id="grønn" role="button" onclick="stopp()" value="Ignorer"> <br> <br>
+    <button class="button-19" id="rød" role="button">STOP</button> 
+</body>
+</html>
